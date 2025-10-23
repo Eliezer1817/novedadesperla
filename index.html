@@ -962,262 +962,215 @@
         }
 
         /* Ultra Modern Product Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            animation: fadeIn var(--duration-normal) var(--ease-standard);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(15px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn var(--duration-normal) var(--ease-standard);
+}
 
-        .modal.active {
-            display: flex;
-        }
+.modal.active {
+    display: flex;
+}
 
-        .modal-content {
-            background: var(--brand-bg);
-            border-radius: 32px;
-            max-width: 1000px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: var(--shadow-strong);
-            animation: slideUp var(--duration-normal) var(--ease-standard);
-        }
-        
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(50px) scale(0.95);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
+.modal-content {
+    background: var(--brand-bg);
+    border-radius: 32px;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-strong);
+    animation: slideUp var(--duration-normal) var(--ease-standard);
+}
 
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.1);
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--brand-text);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--duration-fast) var(--ease-standard);
-            backdrop-filter: blur(10px);
-        }
-        
-        .modal-close:hover {
-            background: var(--brand-accent);
-            color: white;
-            transform: scale(1.1);
-        }
+.modal-body {
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
 
-        .modal-body {
-            padding: 40px;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 48px;
-            align-items: start;
-        }
+.modal-main-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--duration-normal) var(--ease-standard);
+}
 
-        .modal-images {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: sticky;
-            top: 20px;
-        }
+/* ============================================
+   ✅ RESPONSIVE PARA MÓVILES
+   ============================================ */
 
-        .modal-main-image {
-            width: 100%;
-            height: 500px;
-            object-fit: cover;
-            border-radius: 24px;
-            box-shadow: var(--shadow-soft);
-            transition: transform var(--duration-normal) var(--ease-standard);
-        }
-        
-        .modal-main-image:hover {
-            transform: scale(1.02);
-        }
+@media (max-width: 768px) {
+    /* Modal ajustes */
+    .modal {
+        padding: 0; /* Quitar padding en móvil */
+        align-items: flex-end; /* Alinear abajo como drawer */
+    }
+    
+    .modal-content {
+        border-radius: 24px 24px 0 0; /* Solo redondear arriba */
+        max-height: 95vh;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .modal-close {
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+    
+    /* Modal body en columna */
+    .modal-body {
+        grid-template-columns: 1fr; /* Una sola columna */
+        gap: 24px;
+        padding: 20px; /* Menos padding */
+    }
+    
+    /* Imágenes más pequeñas */
+    .modal-images {
+        position: static; /* Quitar sticky */
+    }
+    
+    .modal-main-image {
+        height: 300px; /* Más pequeña en móvil */
+        border-radius: 16px;
+    }
+    
+    .modal-thumbnails {
+        gap: 8px;
+        padding: 2px;
+    }
+    
+    .modal-thumbnail {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        border: 2px solid transparent;
+    }
+    
+    /* Texto más pequeño */
+    .modal-info h2 {
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+    }
+    
+    .modal-price {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+    }
+    
+    .modal-description {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+    
+    /* Opciones más compactas */
+    .option-group {
+        margin-bottom: 20px;
+    }
+    
+    .option-label {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .option-buttons {
+        gap: 8px;
+    }
+    
+    .option-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        border-radius: 16px;
+    }
+    
+    /* Selector de cantidad */
+    .quantity-selector {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+    
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .quantity-input {
+        width: 70px;
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    /* Botones de acción */
+    .modal-actions {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 24px;
+    }
+    
+    .modal-actions .btn {
+        width: 100%;
+        padding: 16px 24px;
+        font-size: 15px;
+    }
+}
 
-        .modal-thumbnails {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 4px;
-        }
+/* ============================================
+   📱 PARA MÓVILES MUY PEQUEÑOS (< 480px)
+   ============================================ */
 
-        .modal-thumbnail {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 16px;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: all var(--duration-fast) var(--ease-standard);
-            border: 3px solid transparent;
-            box-shadow: var(--shadow-subtle);
-        }
-
-        .modal-thumbnail.active {
-            opacity: 1;
-            border-color: var(--brand-accent);
-            transform: scale(1.05);
-        }
-        
-        .modal-thumbnail:hover {
-            opacity: 0.9;
-            transform: scale(1.03);
-        }
-
-        .modal-info h2 {
-            margin-bottom: 20px;
-            color: var(--brand-primary);
-            font-size: clamp(1.75rem, 3vw, 2.25rem);
-        }
-
-        .modal-price {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--brand-accent);
-            margin-bottom: 24px;
-            font-family: var(--font-family-base);
-        }
-
-        .modal-description {
-            color: var(--brand-text-light);
-            margin-bottom: 32px;
-            line-height: 1.7;
-            font-size: 16px;
-        }
-
-        .option-group {
-            margin-bottom: 28px;
-        }
-
-        .option-label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--brand-text);
-            font-size: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        .option-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .option-btn {
-            padding: 12px 20px;
-            border: 2px solid var(--brand-border);
-            background: var(--brand-bg);
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all var(--duration-normal) var(--ease-standard);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .option-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
-            transition: left var(--duration-normal) ease;
-        }
-
-        .option-btn:hover {
-            border-color: var(--brand-accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-subtle);
-        }
-        
-        .option-btn:hover::before {
-            left: 100%;
-        }
-        
-        .option-btn.selected {
-            background: var(--brand-accent);
-            color: var(--brand-primary);
-            border-color: var(--brand-accent);
-            font-weight: 700;
-            transform: scale(1.05);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .quantity-btn {
-            width: 44px;
-            height: 44px;
-            border: 2px solid var(--brand-border);
-            background: var(--brand-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 16px;
-            transition: all var(--duration-fast) var(--ease-standard);
-        }
-        
-        .quantity-btn:hover {
-            border-color: var(--brand-accent);
-            background: var(--brand-accent);
-            color: var(--brand-primary);
-            transform: scale(1.1);
-        }
-
-        .quantity-input {
-            width: 80px;
-            text-align: center;
-            border: 2px solid var(--brand-border);
-            border-radius: 16px;
-            padding: 12px;
-            font-weight: 600;
-            font-size: 16px;
-            background: var(--brand-bg);
-            transition: border-color var(--duration-fast) var(--ease-standard);
-        }
+@media (max-width: 480px) {
+    .modal-body {
+        padding: 16px;
+        gap: 20px;
+    }
+    
+    .modal-main-image {
+        height: 250px;
+    }
+    
+    .modal-info h2 {
+        font-size: 1.25rem;
+    }
+    
+    .modal-price {
+        font-size: 1.5rem;
+    }
+    
+    .option-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+    
+    .quantity-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .quantity-input {
+        width: 60px;
+        padding: 8px;
+    }
+}
         
         .quantity-input:focus {
             outline: none;
@@ -2086,13 +2039,13 @@
                 <div class="contact-card">
                     <div class="contact-icon">📱</div>
                     <h3 class="contact-title">WhatsApp</h3>
-                    <p><a href="https://wa.me/595985552257" target="_blank" class="contact-link">0985 552 257</a></p>
+                    <p><a href="https://wa.me/595985422284" target="_blank" class="contact-link">0985422284</a></p>
                     <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Respuesta inmediata</p>
                 </div>
                 <div class="contact-card">
                     <div class="contact-icon">📸</div>
                     <h3 class="contact-title">Instagram</h3>
-                    <p><a href="https://instagram.com/duncanshop" target="_blank" class="contact-link">@duncanshop</a></p>
+                    <p><a href="https://instagram.com/britos.perla160" target="_blank" class="contact-link">@britos.perla160</a></p>
                     <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Síguenos para novedades</p>
                 </div>
                 <div class="contact-card">
@@ -2113,8 +2066,8 @@
                     <h3>Novedades Perla</h3>
                     <p>Moda y estilo para todos. Tu tienda de confianza en moda femenina desde hace años.</p>
                     <div class="social-links">
-                        <a href="https://wa.me/595985552257" target="_blank" class="social-link">📱</a>
-                        <a href="https://instagram.com/duncanshop" target="_blank" class="social-link">📸</a>
+                        <a href="https://wa.me/595985422284" target="_blank" class="social-link">📱</a>
+                        <a href="https://instagram.com/britos.perla160" target="_blank" class="social-link">📸</a>
                         <a href="https://tiktok.com/@shopduncan" target="_blank" class="social-link">🎵</a>
                     </div>
                 </div>
@@ -2133,15 +2086,15 @@
                         <li><a href="#mayorista">Venta Mayorista</a></li>
                         <li><a href="#minorista">Venta Minorista</a></li>
                         <li><a href="#contacto">Asesoramiento</a></li>
-                        <li><a href="https://wa.me/595985552257" target="_blank">Envíos</a></li>
+                        <li><a href="https://wa.me/59598542284" target="_blank">Envíos</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Información</h3>
                     <ul class="footer-links">
                         <li><a href="#contacto">Contacto</a></li>
-                        <li><a href="https://wa.me/595985552257?text=Necesito información sobre envíos" target="_blank">Envíos y Devoluciones</a></li>
-                        <li><a href="https://wa.me/595985552257?text=Tengo una pregunta" target="_blank">Preguntas Frecuentes</a></li>
+                        <li><a href="https://wa.me/595985422284?text=Necesito información sobre envíos" target="_blank">Envíos y Devoluciones</a></li>
+                        <li><a href="https://wa.me/595985422284?text=Tengo una pregunta" target="_blank">Preguntas Frecuentes</a></li>
                     </ul>
                 </div>
             </div>
@@ -2218,7 +2171,7 @@
     </div>
 
     <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/595985552257" target="_blank" class="whatsapp-float" title="Contactar por WhatsApp">
+    <a href="https://wa.me/595985422284" target="_blank" class="whatsapp-float" title="Contactar por WhatsApp">
         📱
     </a>
 
@@ -2747,7 +2700,7 @@ async function loadProductsFromFirebase() {
             message += `Total: ₲${formatPrice(total)}\n\n`;
             message += "Por favor confirmar disponibilidad y costo de envío. ¡Gracias!";
             
-            const whatsappUrl = `https://wa.me/595985552257?text=${encodeURIComponent(message)}`;
+            const whatsappUrl = `https://wa.me/595985422284?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
 
@@ -2762,7 +2715,7 @@ async function loadProductsFromFirebase() {
             message += `- Precio: ₲${formatPrice(itemTotal)}\n\n`;
             message += "Por favor confirmar disponibilidad y costo de envío. ¡Gracias!";
             
-            const whatsappUrl = `https://wa.me/595985552257?text=${encodeURIComponent(message)}`;
+            const whatsappUrl = `https://wa.me/595985422284?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
 
