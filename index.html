@@ -1903,9 +1903,10 @@
             }
 
             .modal-body {
-                grid-template-columns: 1fr;
-                gap: var(--space-16);
-                padding: var(--space-16);
+                display: flex;
+                flex-direction: column; /* ✓ SOLUCIÓN: 1 columna vertical */
+                gap: 32px;
+                align-items: stretch;
             }
 
             .cart-sidebar {
