@@ -7,9 +7,9 @@
     <meta name="description" content="Descubre la mejor moda femenina en Novedades Perla. Vestidos, blusas, pantalones y accesorios de calidad. ¡Compra ahora!">
     
     <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2347,62 +2347,46 @@
 
         // Firebase Functions
         async function loadProductsFromFirebase() {
-            try {
-                showLoadingSpinner();
-                
-                const querySnapshot = await db.collection("products").get();
-                
-                allProducts = [];
-                querySnapshot.forEach((doc) => {
-                    const productData = doc.data();
-                    allProducts.push({
-                        id: doc.id,
-                        name: productData.name,
-                        description: productData.description,
-                        category: productData.category,
-                        price: productData.price,
-                        stock: productData.stock,
-                        sizes: productData.sizes || [],
-                        colors: productData.colors || [],
-                        images: productData.images || [],
-                        createdAt: productData.createdAt,
-                        status: productData.status
-                    });
-                });
-                
-                hideLoadingSpinner();
-                filteredProducts = [...allProducts];
-                displayProducts(filteredProducts);
-                
-                if (allProducts.length === 0) {
-                    showNoProductsMessage();
-                }
-                
-            } catch (error) {
-                console.error("Error loading products:", error);
-                hideLoadingSpinner();
-                showErrorMessage("Error al cargar productos. Verifica tu conexión.");
-            }
-        }
-
-        function showLoadingSpinner() {
-            document.getElementById('loading-spinner').style.display = 'flex';
-            document.getElementById('product-grid').style.display = 'none';
-        }
-
-        function hideLoadingSpinner() {
-            document.getElementById('loading-spinner').style.display = 'none';
-            document.getElementById('product-grid').style.display = 'grid';
-        }
-
-        function showNoProductsMessage() {
-            document.getElementById('product-grid').innerHTML = `
-                <div class="no-products">
-                    <h3>No hay productos disponibles en este momento</h3>
-                    <p>Vuelve pronto para ver nuestras novedades</p>
-                </div>
-            `;
-        }
+    try {
+        showLoadingSpinner();
+        console.log("🔍 Cargando productos desde Firebase...");
+        
+        const querySnapshot = await db.collection("products").get();
+        
+        console.log(`📊 Encontrados ${querySnapshot.size} documentos`);
+        
+        allProducts = [];
+        querySnapshot.forEach((doc) => {
+            const productData = doc.data();
+            console.log("📦 Producto:", doc.id, productData);
+            
+            allProducts.push({
+                id: doc.id,
+                name: productData.name,
+                description: productData.description,
+                category: productData.category,
+                price: productData.price,
+                stock: productData.stock,
+                sizes: productData.sizes || [],
+                colors: productData.colors || [],
+                images: productData.images || [],
+                createdAt: productData.createdAt,
+                status: productData.status
+            });
+        });
+        
+        hideLoadingSpinner();
+        filteredProducts = [...allProducts];
+        displayProducts(filteredProducts);
+        
+        console.log(`✅ Productos cargados: ${allProducts.length}`);
+        
+    } catch (error) {
+        console.error("❌ Error loading products:", error);
+        hideLoadingSpinner();
+        showErrorMessage("Error al cargar productos. Verifica tu conexión.");
+    }
+}
 
         function showErrorMessage(message) {
             document.getElementById('product-grid').innerHTML = `
