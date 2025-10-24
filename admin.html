@@ -6,60 +6,10 @@
     <title>Admin Panel - Novedades Perla</title>
     
     <!-- Firebase SDKs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-app.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-firestore.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-storage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-storage.js"></script>
     <style>
-        /* 
-        CONFIGURACIÓN DE FIREBASE:
-        
-        1. Ve a tu proyecto Firebase: https://console.firebase.google.com/project/perlanovedades-94980
-        
-        2. En "Project Settings" > "General" > "Your apps", encuentra la configuración web
-        
-        3. Copia los valores y reemplázalos en firebaseConfig:
-           - apiKey
-           - authDomain
-           - projectId
-           - storageBucket
-           - messagingSenderId
-           - appId
-        
-        4. Habilita Firestore Database:
-           - Ve a "Firestore Database"
-           - Clic en "Create database"
-           - Elige modo "Test" (temporalmente) o "Production" con reglas
-        
-        5. Habilita Storage:
-           - Ve a "Storage"
-           - Clic en "Get started"
-           - Configura reglas de seguridad
-        
-        6. Reglas de Firestore (para desarrollo):
-        rules_version = '2';
-        service cloud.firestore {
-          match /databases/{database}/documents {
-            match /products/{productId} {
-              allow read: if true;
-              allow write: if true; // Cambia esto en producción
-            }
-          }
-        }
-        
-        7. Reglas de Storage (para desarrollo):
-        rules_version = '2';
-        service firebase.storage {
-          match /b/{bucket}/o {
-            match /products/{allPaths=**} {
-              allow read: if true;
-              allow write: if true; // Cambia esto en producción
-            }
-          }
-        }
-        
-        IMPORTANTE: En producción, implementa autenticación y reglas de seguridad apropiadas.
-        */
-        
         :root {
             --primary: #e91e63;
             --primary-dark: #c2185b;
@@ -99,12 +49,14 @@
             background: var(--bg-secondary);
             color: var(--text-primary);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         /* Layout */
         .admin-layout {
             display: flex;
             min-height: 100vh;
+            position: relative;
         }
         
         .sidebar {
@@ -115,6 +67,7 @@
             height: 100vh;
             overflow-y: auto;
             z-index: 1000;
+            transition: transform 0.3s ease;
         }
         
         .main-content {
@@ -122,6 +75,37 @@
             flex: 1;
             padding: 24px;
             width: calc(100% - 280px);
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        
+        .mobile-logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
         }
         
         /* Sidebar */
@@ -210,7 +194,7 @@
         }
         
         .page-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -219,15 +203,16 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border: none;
             border-radius: var(--radius);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.3s ease;
             white-space: nowrap;
+            min-height: 44px; /* Para mejor táctil */
         }
         
         .btn-primary {
@@ -265,13 +250,15 @@
         }
         
         .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.8rem;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            min-height: 36px;
         }
         
         .btn-lg {
-            padding: 14px 24px;
+            padding: 16px 24px;
             font-size: 1rem;
+            min-height: 52px;
         }
         
         /* Cards */
@@ -280,6 +267,7 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-light);
+            overflow: hidden;
         }
         
         .card-header {
@@ -300,14 +288,14 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
             margin-bottom: 24px;
         }
         
         .stat-card {
             background: var(--bg-primary);
-            padding: 24px;
+            padding: 20px;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow);
             border-left: 4px solid;
@@ -319,7 +307,7 @@
         .stat-card.info { border-left-color: var(--info); }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 4px;
@@ -343,18 +331,19 @@
         
         .form-label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 500;
             color: var(--text-primary);
         }
         
         .form-control {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px;
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            font-size: 0.95rem;
+            font-size: 1rem;
             transition: border-color 0.3s ease;
+            min-height: 44px; /* Para mejor táctil */
         }
         
         .form-control:focus {
@@ -364,7 +353,7 @@
         }
         
         textarea.form-control {
-            height: 100px;
+            height: 120px;
             resize: vertical;
         }
         
@@ -389,8 +378,8 @@
         }
         
         .checkbox-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
         }
         
         /* Dynamic Lists */
@@ -419,7 +408,8 @@
             flex: 1;
             border: none;
             background: transparent;
-            padding: 4px 0;
+            padding: 8px 0;
+            font-size: 1rem;
         }
         
         .list-input:focus {
@@ -430,7 +420,7 @@
         .image-upload-area {
             border: 2px dashed var(--border);
             border-radius: var(--radius-lg);
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
             background: var(--bg-secondary);
             transition: all 0.3s ease;
@@ -444,7 +434,7 @@
         }
         
         .upload-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--text-muted);
             margin-bottom: 16px;
         }
@@ -452,17 +442,18 @@
         .upload-text {
             color: var(--text-secondary);
             margin-bottom: 8px;
+            font-size: 1rem;
         }
         
         .upload-hint {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
         
         .image-preview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
             margin-top: 20px;
         }
         
@@ -489,8 +480,8 @@
         }
         
         .image-action-btn {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border: none;
             border-radius: 50%;
             background: rgba(0, 0, 0, 0.7);
@@ -499,7 +490,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
         }
         
         .primary-badge {
@@ -508,9 +499,9 @@
             left: 8px;
             background: var(--primary);
             color: white;
-            padding: 2px 8px;
+            padding: 4px 8px;
             border-radius: var(--radius);
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 500;
         }
         
@@ -540,7 +531,7 @@
             color: var(--text-secondary);
         }
         
-        /* Tables */
+        /* Tables - Desktop */
         .table-container {
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
@@ -632,6 +623,111 @@
         .action-buttons {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        /* Product Cards - Mobile */
+        .products-cards {
+            display: none;
+            gap: 16px;
+            flex-direction: column;
+        }
+        
+        .product-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .product-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .product-card-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        
+        .product-card-info {
+            flex: 1;
+        }
+        
+        .product-card-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .product-card-category {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        
+        .product-card-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-card-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+        }
+        
+        .product-card-detail {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .product-card-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
         }
         
         /* Search & Filters */
@@ -651,10 +747,11 @@
         
         .search-input {
             width: 100%;
-            padding: 10px 12px 10px 40px;
+            padding: 12px 12px 12px 40px;
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            font-size: 0.95rem;
+            font-size: 1rem;
+            min-height: 44px; /* Para mejor táctil */
         }
         
         .search-icon {
@@ -729,6 +826,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            padding: 16px;
         }
         
         .modal-overlay.active {
@@ -740,7 +838,7 @@
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
             max-width: 500px;
-            width: 90%;
+            width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             transform: translateY(50px);
@@ -771,6 +869,11 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--text-muted);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .modal-body {
@@ -783,10 +886,25 @@
         }
         
         /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+                width: calc(100% - 250px);
+            }
+        }
+        
         @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
+            }
+            
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
+                width: 280px;
             }
             
             .sidebar.mobile-open {
@@ -796,6 +914,7 @@
             .main-content {
                 margin-left: 0;
                 width: 100%;
+                padding: 70px 16px 16px; /* Ajuste para el header móvil */
             }
             
             .content-header {
@@ -823,13 +942,107 @@
             .checkbox-group {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
+            
+            .modal {
+                width: 100%;
+            }
+            
+            /* Mostrar tarjetas en móvil y ocultar tabla */
+            .table-container {
+                display: none;
+            }
+            
+            .products-cards {
+                display: flex;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 70px 12px 12px;
+            }
+            
+            .card-body {
+                padding: 16px;
+            }
+            
+            .stat-card {
+                padding: 16px;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .image-preview-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-control, .search-input {
+                font-size: 16px; /* Evita zoom en iOS */
+            }
+            
+            .product-card-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-card-actions {
+                flex-direction: column;
+            }
+        }
+        
+        /* Overlay para móvil */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <a href="#" class="mobile-logo">Novedades Perla</a>
+        <div style="width: 44px;"></div> <!-- Espacio para balancear -->
+    </div>
+    
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
     <div class="admin-layout">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="#" class="logo">
                     <span>✨</span>
@@ -929,7 +1142,7 @@
                         <span class="search-icon">🔍</span>
                         <input type="text" class="search-input" id="productSearch" placeholder="Buscar productos...">
                     </div>
-                    <select class="form-control" id="categoryFilter" style="width: auto;">
+                    <select class="form-control" id="categoryFilter" style="width: 100%;">
                         <option value="">Todas las categorías</option>
                         <option value="Camisas">Camisas</option>
                         <option value="Vestidos">Vestidos</option>
@@ -938,7 +1151,7 @@
                         <option value="Chaquetas">Chaquetas</option>
                         <option value="Accesorios">Accesorios</option>
                     </select>
-                    <select class="form-control" id="stockFilter" style="width: auto;">
+                    <select class="form-control" id="stockFilter" style="width: 100%;">
                         <option value="">Todo el stock</option>
                         <option value="in-stock">En Stock</option>
                         <option value="low-stock">Stock Bajo</option>
@@ -946,6 +1159,7 @@
                     </select>
                 </div>
                 
+                <!-- Tabla para escritorio -->
                 <div class="table-container">
                     <table class="table">
                         <thead>
@@ -968,6 +1182,14 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                
+                <!-- Tarjetas para móviles -->
+                <div class="products-cards" id="productsCards">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Cargando productos desde Firebase...
+                    </div>
                 </div>
             </section>
             
@@ -1084,7 +1306,7 @@
                                 </div>
                             </div>
                             
-                            <div style="display: flex; gap: 16px; margin-top: 32px;">
+                            <div style="display: flex; gap: 16px; margin-top: 32px; flex-wrap: wrap;">
                                 <button type="submit" class="btn btn-primary btn-lg" id="saveProductBtn">
                                     💾 Guardar Producto
                                 </button>
@@ -1110,7 +1332,7 @@
                 <p>¿Estás seguro de que deseas eliminar este producto?</p>
                 <p><strong id="deleteProductName"></strong></p>
                 <p style="color: var(--error); font-size: 0.9rem;">Esta acción no se puede deshacer.</p>
-                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; flex-wrap: wrap;">
                     <button class="btn btn-secondary" onclick="closeModal('deleteModal')">Cancelar</button>
                     <button class="btn btn-error" id="confirmDeleteBtn">Eliminar</button>
                 </div>
@@ -1126,12 +1348,12 @@
     <script>
         // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyACNqx205KQb9FcH43blkAMxATs4pQlK4o", // Reemplaza con tu API Key
+            apiKey: "AIzaSyACNqx205KQb9FcH43blkAMxATs4pQlK4o",
             authDomain: "perlanovedades-94980.firebaseapp.com",
             projectId: "perlanovedades-94980",
             storageBucket: "perlanovedades-94980.firebasestorage.app",
-            messagingSenderId: "754782290241", // Reemplaza con tu Sender ID
-            appId: "1:754782290241:web:dd7d656ad1c5e5f2e221c0" // Reemplaza con tu App ID
+            messagingSenderId: "754782290241",
+            appId: "1:754782290241:web:dd7d656ad1c5e5f2e221c0"
         };
         
         // Initialize Firebase
@@ -1145,6 +1367,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeFirebase();
             initializeApp();
+            setupMobileNavigation();
         });
         
         function initializeFirebase() {
@@ -1191,6 +1414,32 @@
             setupNavigation();
             setupImageUpload();
             showSection('dashboard');
+        }
+        
+        function setupMobileNavigation() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('mobile-open');
+                sidebarOverlay.classList.toggle('active');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('mobile-open');
+                sidebarOverlay.classList.remove('active');
+            });
+            
+            // Cerrar sidebar al hacer clic en un enlace (en móvil)
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('mobile-open');
+                        sidebarOverlay.classList.remove('active');
+                    }
+                });
+            });
         }
         
         function setupEventListeners() {
@@ -1351,6 +1600,7 @@
         
         function displayProducts() {
             const tbody = document.getElementById('productsTableBody');
+            const cardsContainer = document.getElementById('productsCards');
             
             if (filteredProducts.length === 0) {
                 tbody.innerHTML = `
@@ -1360,10 +1610,17 @@
                         </td>
                     </tr>
                 `;
+                
+                cardsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        No se encontraron productos
+                    </div>
+                `;
                 return;
             }
             
-            const html = filteredProducts.map(product => {
+            // Actualizar tabla para escritorio
+            const tableHtml = filteredProducts.map(product => {
                 const imageUrl = product.images && product.images.length > 0 ? product.images[0].url : null;
                 const stockClass = getStockClass(product.stock);
                 const stockText = getStockText(product.stock);
@@ -1405,17 +1662,75 @@
                 `;
             }).join('');
             
-            tbody.innerHTML = html;
+            tbody.innerHTML = tableHtml;
+            
+            // Actualizar tarjetas para móviles
+            const cardsHtml = filteredProducts.map(product => {
+                const imageUrl = product.images && product.images.length > 0 ? product.images[0].url : null;
+                const stockClass = getStockClass(product.stock);
+                const stockText = getStockText(product.stock);
+                
+                return `
+                    <div class="product-card">
+                        <div class="product-card-header">
+                            <div class="product-card-image">
+                                ${imageUrl ? `<img src="${imageUrl}" alt="${product.name}" class="product-card-image">` : '📦'}
+                            </div>
+                            <div class="product-card-info">
+                                <div class="product-card-name">${product.name}</div>
+                                <div class="product-card-category">${product.category}</div>
+                                <div class="product-card-description">${product.description}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card-details">
+                            <div class="product-card-detail">
+                                <div class="detail-label">Precio</div>
+                                <div class="detail-value">₲${product.price?.toLocaleString()}</div>
+                            </div>
+                            <div class="product-card-detail">
+                                <div class="detail-label">Stock</div>
+                                <div class="detail-value">${product.stock} unidades</div>
+                            </div>
+                            <div class="product-card-detail">
+                                <div class="detail-label">Estado</div>
+                                <div class="detail-value">
+                                    <span class="stock-badge ${stockClass}">${stockText}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card-actions">
+                            <button class="btn btn-secondary btn-sm" onclick="editProduct('${product.id}')">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn btn-error btn-sm" onclick="deleteProduct('${product.id}', '${product.name}')">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            cardsContainer.innerHTML = cardsHtml;
         }
         
         function displayProductsError() {
             const tbody = document.getElementById('productsTableBody');
+            const cardsContainer = document.getElementById('productsCards');
+            
             tbody.innerHTML = `
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 40px; color: var(--error);">
                         Error al cargar productos desde Firebase
                     </td>
                 </tr>
+            `;
+            
+            cardsContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: var(--error);">
+                    Error al cargar productos desde Firebase
+                </div>
             `;
         }
         
@@ -1456,54 +1771,54 @@
         
         // Product Form Functions
         async function handleFormSubmit(e) {
-    e.preventDefault();
-    
-    const submitBtn = document.getElementById('saveProductBtn');
-    const originalText = submitBtn.innerHTML;
-    
-    try {
-        submitBtn.innerHTML = '💾 Guardando...';
-        submitBtn.disabled = true;
-        
-        const productData = getFormData();
-        
-        if (!validateFormData(productData)) {
-            return;
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('saveProductBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            try {
+                submitBtn.innerHTML = '💾 Guardando...';
+                submitBtn.disabled = true;
+                
+                const productData = getFormData();
+                
+                if (!validateFormData(productData)) {
+                    return;
+                }
+                
+                // ✅ SUBIR IMÁGENES A IMGBB
+                if (uploadedImages.length > 0) {
+                    productData.images = await uploadImagesToImgBB(uploadedImages);
+                } else if (currentEditingProduct && currentEditingProduct.images) {
+                    productData.images = currentEditingProduct.images;
+                } else {
+                    // Imagen por defecto si no hay imágenes
+                    productData.images = [{
+                        url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        name: "default-product.jpg",
+                        isPrimary: true
+                    }];
+                }
+                
+                // Guardar en Firestore
+                if (currentEditingProduct) {
+                    await updateProduct(currentEditingProduct.id, productData);
+                } else {
+                    await createProduct(productData);
+                }
+                
+                showNotification('✅ Producto guardado exitosamente en Firebase', 'success');
+                resetForm();
+                showSection('products');
+                
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showNotification('❌ Error al guardar producto: ' + error.message, 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         }
-        
-        // ✅ SUBIR IMÁGENES A IMGBB
-        if (uploadedImages.length > 0) {
-            productData.images = await uploadImagesToImgBB(uploadedImages);
-        } else if (currentEditingProduct && currentEditingProduct.images) {
-            productData.images = currentEditingProduct.images;
-        } else {
-            // Imagen por defecto si no hay imágenes
-            productData.images = [{
-                url: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-                name: "default-product.jpg",
-                isPrimary: true
-            }];
-        }
-        
-        // Guardar en Firestore
-        if (currentEditingProduct) {
-            await updateProduct(currentEditingProduct.id, productData);
-        } else {
-            await createProduct(productData);
-        }
-        
-        showNotification('✅ Producto guardado exitosamente en Firebase', 'success');
-        resetForm();
-        showSection('products');
-        
-    } catch (error) {
-        console.error('Error saving product:', error);
-        showNotification('❌ Error al guardar producto: ' + error.message, 'error');
-    } finally {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }
-}
         
         function getFormData() {
             // Get sizes
@@ -1832,137 +2147,83 @@
         }
         
         async function uploadImagesToImgBB(images) {
-    const uploadProgress = document.getElementById('uploadProgress');
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    
-    uploadProgress.classList.remove('hidden');
-    
-    const uploadedUrls = [];
-    
-    for (let i = 0; i < images.length; i++) {
-        const image = images[i];
-        const progress = ((i + 1) / images.length) * 100;
-        
-        progressFill.style.width = `${progress}%`;
-        progressText.textContent = `Subiendo imagen ${i + 1} de ${images.length}...`;
-        
-        try {
-            // Convertir imagen a Base64
-            const base64Image = await fileToBase64(image.file);
+            const uploadProgress = document.getElementById('uploadProgress');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
             
-            // Subir a ImgBB
-            const imgbbUrl = await uploadToImgBB(base64Image, image.file.name);
+            uploadProgress.classList.remove('hidden');
             
-            uploadedUrls.push({
-                url: imgbbUrl,
-                name: image.file.name,
-                isPrimary: image.isPrimary
+            const uploadedUrls = [];
+            
+            for (let i = 0; i < images.length; i++) {
+                const image = images[i];
+                const progress = ((i + 1) / images.length) * 100;
+                
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `Subiendo imagen ${i + 1} de ${images.length}...`;
+                
+                try {
+                    // Convertir imagen a Base64
+                    const base64Image = await fileToBase64(image.file);
+                    
+                    // Subir a ImgBB
+                    const imgbbUrl = await uploadToImgBB(base64Image, image.file.name);
+                    
+                    uploadedUrls.push({
+                        url: imgbbUrl,
+                        name: image.file.name,
+                        isPrimary: image.isPrimary
+                    });
+                    
+                } catch (error) {
+                    console.error('❌ Error uploading image to ImgBB:', error);
+                    showNotification(`⚠️ No se pudo subir ${image.file.name}`, 'warning');
+                }
+            }
+            
+            uploadProgress.classList.add('hidden');
+            return uploadedUrls;
+        }
+
+        // Función para convertir archivo a Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    // Remover el prefijo "data:image/...;base64,"
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Función para subir a ImgBB
+        async function uploadToImgBB(base64Image, filename) {
+            const apiKey = '8d6568a12e92d3897e637ec01fb5aa4d'; // ⚠️ REEMPLAZA ESTO con tu API key real de ImgBB
+            
+            const formData = new FormData();
+            formData.append('image', base64Image);
+            
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+                method: 'POST',
+                body: formData
             });
             
-        } catch (error) {
-            console.error('❌ Error uploading image to ImgBB:', error);
-            showNotification(`⚠️ No se pudo subir ${image.file.name}`, 'warning');
+            if (!response.ok) {
+                throw new Error('Error uploading to ImgBB');
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                return data.data.url; // URL de la imagen
+            } else {
+                throw new Error(data.error.message || 'Upload failed');
+            }
         }
-    }
-    
-    uploadProgress.classList.add('hidden');
-    return uploadedUrls;
-}
-
-// Función para convertir archivo a Base64
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            // Remover el prefijo "data:image/...;base64,"
-            const base64 = reader.result.split(',')[1];
-            resolve(base64);
-        };
-        reader.onerror = error => reject(error);
-    });
-}
-
-// Función para subir a ImgBB
-async function uploadToImgBB(base64Image, filename) {
-    const apiKey = '8d6568a12e92d3897e637ec01fb5aa4d'; // ⚠️ REEMPLAZA ESTO con tu API key real de ImgBB
-    
-    const formData = new FormData();
-    formData.append('image', base64Image);
-    
-    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-        method: 'POST',
-        body: formData
-    });
-    
-    if (!response.ok) {
-        throw new Error('Error uploading to ImgBB');
-    }
-    
-    const data = await response.json();
-    
-    if (data.success) {
-        return data.data.url; // URL de la imagen
-    } else {
-        throw new Error(data.error.message || 'Upload failed');
-    }
-}
         
-// Función para convertir archivo a Base64
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            // Remover el prefijo "data:image/...;base64,"
-            const base64 = reader.result.split(',')[1];
-            resolve(base64);
-        };
-        reader.onerror = error => reject(error);
-    });
-}
-
-// Función para subir imágenes a ImgBB (REEMPLAZA la función uploadImagesToFirebase)
-async function uploadImagesToImgBB(images) {
-    const uploadProgress = document.getElementById('uploadProgress');
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    
-    uploadProgress.classList.remove('hidden');
-    
-    const uploadedUrls = [];
-    
-    for (let i = 0; i < images.length; i++) {
-        const image = images[i];
-        const progress = ((i + 1) / images.length) * 100;
-        
-        progressFill.style.width = `${progress}%`;
-        progressText.textContent = `Subiendo imagen ${i + 1} de ${images.length}...`;
-        
-        try {
-            // Convertir imagen a Base64
-            const base64Image = await fileToBase64(image.file);
-            
-            // Subir a ImgBB
-            const imgbbUrl = await uploadToImgBB(base64Image, image.file.name);
-            
-            uploadedUrls.push({
-                url: imgbbUrl,
-                name: image.file.name,
-                isPrimary: image.isPrimary
-            });
-            
-        } catch (error) {
-            console.error('❌ Error uploading image to ImgBB:', error);
-            showNotification(`⚠️ No se pudo subir ${image.file.name}`, 'warning');
-        }
-    }
-    
-    uploadProgress.classList.add('hidden');
-    return uploadedUrls;
-}
-
         // Utility Functions
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
