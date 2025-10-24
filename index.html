@@ -378,41 +378,6 @@
             filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
         }
 
-        /* Hamburger Menu Button */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 21px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 1001;
-        }
-        
-        .hamburger span {
-            width: 100%;
-            height: 3px;
-            background-color: var(--brand-primary);
-            border-radius: 2px;
-            transition: all var(--duration-normal) var(--ease-standard);
-            transform-origin: center;
-        }
-        
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-        
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
-
         .nav-menu {
             display: flex;
             list-style: none;
@@ -447,6 +412,42 @@
         
         .nav-link:hover::after {
             width: 100%;
+        }
+
+        /* Hamburguesa Menu Button */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--brand-primary);
+            border-radius: 3px;
+            transition: all var(--duration-normal) var(--ease-standard);
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
         }
 
         .cart-btn {
@@ -996,7 +997,7 @@
             border: 2px dashed rgba(0,0,0,0.1);
         }
 
-        /* Ultra Modern Product Modal */
+        /* Ultra Modern Product Modal - FIXED */
         .modal {
             position: fixed;
             top: 0;
@@ -1011,6 +1012,7 @@
             justify-content: center;
             padding: 24px;
             animation: fadeIn var(--duration-normal) var(--ease-standard);
+            overflow-y: auto;
         }
         
         @keyframes fadeIn {
@@ -1083,7 +1085,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            position: relative;
+            position: sticky;
             top: 20px;
         }
 
@@ -1910,7 +1912,7 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            /* Hamburger Menu Styles for Mobile */
+            /* Hamburguesa Menu */
             .hamburger {
                 display: flex;
             }
@@ -1927,11 +1929,10 @@
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: flex-start;
-                padding: 100px 30px 30px;
-                transition: right 0.4s ease;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-                border-left: 1px solid rgba(0,0,0,0.08);
-                z-index: 999;
+                padding: 100px 32px 32px;
+                transition: right var(--duration-normal) var(--ease-standard);
+                box-shadow: var(--shadow-medium);
+                gap: 0;
             }
 
             .nav-menu.active {
@@ -1939,24 +1940,63 @@
             }
 
             .nav-menu li {
-                margin: 15px 0;
                 width: 100%;
+                margin-bottom: 16px;
             }
 
             .nav-link {
                 display: block;
-                padding: 12px 0;
+                padding: 16px 0;
                 font-size: 18px;
-                width: 100%;
                 border-bottom: 1px solid rgba(0,0,0,0.05);
+                width: 100%;
+            }
+
+            .nav-link::after {
+                display: none;
             }
 
             .nav-menu .cart-btn {
+                margin-top: 32px;
                 width: 100%;
                 justify-content: center;
-                margin-top: 20px;
             }
 
+            /* Modal Responsive */
+            .modal-body {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 24px;
+            }
+
+            .modal-images {
+                position: static;
+            }
+
+            .modal-main-image {
+                height: 300px;
+            }
+
+            .modal-thumbnails {
+                justify-content: center;
+            }
+
+            .modal-thumbnail {
+                width: 70px;
+                height: 70px;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            /* Cart Sidebar Responsive */
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            /* Otros estilos responsive */
             .hero-title {
                 font-size: 2.5rem;
             }
@@ -1979,20 +2019,43 @@
             .search-input {
                 width: 100%;
             }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                border-radius: 20px;
+                max-height: 95vh;
+            }
 
             .modal-body {
-                grid-template-columns: 1fr;
-                gap: var(--space-16);
-                padding: var(--space-16);
+                padding: 16px;
             }
 
-            .cart-sidebar {
-                width: 100%;
-                right: -100%;
+            .modal-main-image {
+                height: 250px;
             }
 
-            .modal-actions {
-                flex-direction: column;
+            .modal-thumbnail {
+                width: 60px;
+                height: 60px;
+            }
+
+            .option-buttons {
+                gap: 8px;
+            }
+
+            .option-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .quantity-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .quantity-input {
+                width: 60px;
             }
         }
 
@@ -2017,14 +2080,11 @@
             <a href="#" class="logo">
                 <span class="logo-icon">✨</span> Novedades Perla
             </a>
-            
-            <!-- Hamburger Menu Button -->
             <button class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="#inicio" class="nav-link">Inicio</a></li>
                 <li><a href="#productos" class="nav-link">Productos</a></li>
@@ -2033,7 +2093,7 @@
                 <li><a href="#contacto" class="nav-link">Contacto</a></li>
                 <li>
                     <button class="btn btn-primary cart-btn" onclick="toggleCart()">
-                        🛒 Mi Carrito
+                        🛒 Carrito
                         <span class="cart-count" id="cart-count">0</span>
                     </button>
                 </li>
@@ -2344,45 +2404,33 @@
             loadProductsFromFirebase();
             setupEventListeners();
             setupScrollEffects();
-            setupHamburgerMenu();
         });
 
-        // Hamburger Menu Functionality
-        function setupHamburgerMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('nav-menu');
-            
-            hamburger.addEventListener('click', function() {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-                
-                // Prevent body scroll when menu is open
-                document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-            });
-            
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            });
-            
-            // Close menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInsideMenu = navMenu.contains(event.target);
-                const isClickInsideHamburger = hamburger.contains(event.target);
-                
-                if (!isClickInsideMenu && !isClickInsideHamburger && navMenu.classList.contains('active')) {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
+        // Hamburguesa Menu Functionality
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
         }
 
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+
         function setupEventListeners() {
+            // Hamburguesa menu
+            hamburger.addEventListener('click', toggleMenu);
+            
             // Search and filters
             document.getElementById('search-input').addEventListener('input', filterProducts);
             document.getElementById('category-filter').addEventListener('change', filterProducts);
@@ -2418,119 +2466,107 @@
         }
         
         function setupScrollEffects() {
-    const navbar = document.querySelector('.navbar');
-    let ticking = false;
-    
-    function updateNavbar() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-        
-        ticking = false;
-    }
-    
-    function requestTick() {
-        if (!ticking) {
-            requestAnimationFrame(updateNavbar);
-            ticking = true;
-        }
-    }
-    
-    window.addEventListener('scroll', requestTick);
-    
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-    
-    // Observe elements for scroll animations
-    const animateElements = document.querySelectorAll('.feature-card, .product-card, .business-card, .contact-card');
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-}
-
-// ✅ AGREGAR AQUÍ LAS FUNCIONES DE LOADING
-function showLoadingSpinner() {
-    document.getElementById('loading-spinner').style.display = 'flex';
-    document.getElementById('product-grid').style.display = 'none';
-}
-
-function hideLoadingSpinner() {
-    document.getElementById('loading-spinner').style.display = 'none';
-    document.getElementById('product-grid').style.display = 'grid';
-}
-
-function showErrorMessage(message) {
-    const productGrid = document.getElementById('product-grid');
-    productGrid.innerHTML = `
-        <div class="error-message">
-            <h3>Error al cargar productos</h3>
-            <p>${message}</p>
-            <button class="btn btn-primary" onclick="loadProductsFromFirebase()">Reintentar</button>
-        </div>
-    `;
-}
-
-// Firebase Functions
-async function loadProductsFromFirebase() {
-    try {
-        showLoadingSpinner();
-        console.log("🔍 Cargando productos desde Firebase...");
-        
-        const querySnapshot = await db.collection("products").get();
-        
-        console.log(`📊 Encontrados ${querySnapshot.size} documentos`);
-        
-        allProducts = [];
-        querySnapshot.forEach((doc) => {
-            const productData = doc.data();
-            console.log("📦 Producto:", doc.id, productData);
+            const navbar = document.querySelector('.navbar');
+            let ticking = false;
             
-            allProducts.push({
-                id: doc.id,
-                name: productData.name,
-                description: productData.description,
-                category: productData.category,
-                price: productData.price,
-                stock: productData.stock,
-                sizes: productData.sizes || [],
-                colors: productData.colors || [],
-                images: productData.images || [],
-                createdAt: productData.createdAt,
-                status: productData.status
+            function updateNavbar() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateNavbar);
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', requestTick);
+            
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for scroll animations
+            const animateElements = document.querySelectorAll('.feature-card, .product-card, .business-card, .contact-card');
+            animateElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
             });
-        });
-        
-        hideLoadingSpinner();
-        filteredProducts = [...allProducts];
-        displayProducts(filteredProducts);
-        
-        console.log(`✅ Productos cargados: ${allProducts.length}`);
-        
-    } catch (error) {
-        console.error("❌ Error loading products:", error);
-        hideLoadingSpinner();
-        showErrorMessage("Error al cargar productos. Verifica tu conexión.");
-    }
-}
+        }
+
+        function showLoadingSpinner() {
+            document.getElementById('loading-spinner').style.display = 'flex';
+            document.getElementById('product-grid').style.display = 'none';
+        }
+
+        function hideLoadingSpinner() {
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('product-grid').style.display = 'grid';
+        }
+
+        // Firebase Functions
+        async function loadProductsFromFirebase() {
+            try {
+                showLoadingSpinner();
+                console.log("🔍 Cargando productos desde Firebase...");
+                
+                const querySnapshot = await db.collection("products").get();
+                
+                console.log(`📊 Encontrados ${querySnapshot.size} documentos`);
+                
+                allProducts = [];
+                querySnapshot.forEach((doc) => {
+                    const productData = doc.data();
+                    console.log("📦 Producto:", doc.id, productData);
+                    
+                    allProducts.push({
+                        id: doc.id,
+                        name: productData.name,
+                        description: productData.description,
+                        category: productData.category,
+                        price: productData.price,
+                        stock: productData.stock,
+                        sizes: productData.sizes || [],
+                        colors: productData.colors || [],
+                        images: productData.images || [],
+                        createdAt: productData.createdAt,
+                        status: productData.status
+                    });
+                });
+                
+                hideLoadingSpinner();
+                filteredProducts = [...allProducts];
+                displayProducts(filteredProducts);
+                
+                console.log(`✅ Productos cargados: ${allProducts.length}`);
+                
+            } catch (error) {
+                console.error("❌ Error loading products:", error);
+                hideLoadingSpinner();
+                showErrorMessage("Error al cargar productos. Verifica tu conexión.");
+            }
+        }
 
         function showErrorMessage(message) {
             document.getElementById('product-grid').innerHTML = `
@@ -2652,10 +2688,12 @@ async function loadProductsFromFirebase() {
             
             // Show modal
             document.getElementById('product-modal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
         }
 
         function closeProductModal() {
             document.getElementById('product-modal').classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
             currentProduct = null;
             selectedSize = null;
             selectedColor = null;
